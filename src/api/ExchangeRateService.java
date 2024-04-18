@@ -1,2 +1,4 @@
-package api;public class ExchangeRateService {
+package api;
+
+public class ExchangeRateService {
 }
