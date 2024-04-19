@@ -48,7 +48,8 @@ public class UserMenu {
         sc.nextLine();
         String firstValue, secondValue, amount;
         this.displayMessage("Escolha a moeda que deseja usar como base, temos como calcular de todas que existem!");
-        this.displayMessage("As principais são: EUR, USD, BRL, CHF, ARS. Mas fique a vontade para escolher outras");
+        this.displayMessage("As principais são: EUR, USD, BRL, CHF, ARS, BOB, CLP, COP.");
+        this.displayMessage("Mas fique a vontade para escolher outra");
         this.displayMessage("O FORMATO ESPERADO É CÓDIGO DE 3 LETRAS DA ISO 4217");
 
         firstValue = sc.nextLine();
