@@ -1,5 +1,6 @@
 package menu;
 
+import enums.Currencies;
 import service.ValueService;
 
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class UserMenu {
                 #############################################
                 """);
 
-        while(true) {
+        while (true) {
             int option = -1;
             this.displayMessage("Escolha a opção que deseja para realizar a conversão de valores!");
             this.displayMessage("1 -> Comparar valores entre moedas");
@@ -52,20 +53,50 @@ public class UserMenu {
 
         firstValue = sc.nextLine();
 
+        while (!existsByIsoCurrencyFromEnum(firstValue)) {
+            this.displayMessage("Esse código de moeda não foi encontrado, favor insira corretamente");
+            firstValue = sc.nextLine();
+        }
+
         this.displayMessage("Agora escolha a moeda que deseja usar como alvo");
 
         secondValue = sc.nextLine();
 
+        while (!existsByIsoCurrencyFromEnum(secondValue)) {
+            this.displayMessage("Esse código de moeda não foi encontrado, favor insira corretamente");
+            secondValue = sc.nextLine();
+        }
+
         this.displayMessage("Agora escolha a quantidade monetária para calcular");
         amount = sc.nextLine();
 
+        while (!isValidValue(amount)) {
+            this.displayMessage("O valor digitado não é valido, favor insira corretamente");
+            amount = sc.nextLine();
+        }
+
         String valorCalculado = service.findValueInPairs(firstValue, secondValue, amount);
 
-        this.displayMessage(String.format("O valor encontrado foi %s, a base foi '%s', o alvo foi '%s', o valor inicial foi %s", valorCalculado, firstValue, secondValue, amount ));
+        this.displayMessage(String.format("O valor encontrado foi %s, a base foi '%s', o alvo foi '%s', o valor inicial foi %s", valorCalculado, firstValue, secondValue, amount));
     }
 
     private void displayMessage(String msg) {
         System.out.println(msg);
+    }
+
+    private boolean existsByIsoCurrencyFromEnum(String currency) {
+        Currencies item = Currencies.findByISOValue(currency.toUpperCase());
+
+        return item != null;
+    }
+
+    private boolean isValidValue(String value) {
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 }
 

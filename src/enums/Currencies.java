@@ -165,4 +165,13 @@ public enum Currencies {
 
     Currencies(String currencyName, String Country) {
     }
+
+    public static Currencies findByISOValue(String value) {
+        for (Currencies v : values()) {
+            if (v.name().equals(value)) {
+                return v;
+            }
+        }
+        return null;
+    }
 }
