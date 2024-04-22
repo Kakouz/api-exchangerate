@@ -30,3 +30,4 @@ bin/
 
 ### Arquivos Externos ###
 src/resources/external-resources.properties
+./build

@@ -1,8 +1,11 @@
 package menu;
 
 import enums.Currencies;
+import service.DataHistoryService;
+import service.LoggingService;
 import service.ValueService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class UserMenu {
@@ -25,6 +28,7 @@ public class UserMenu {
             int option = -1;
             this.displayMessage("Escolha a opção que deseja para realizar a conversão de valores!");
             this.displayMessage("1 -> Comparar valores entre moedas");
+            this.displayMessage("2 -> Mostrar histórico da sessão atual");
             this.displayMessage("0 -> Sair");
 
             try {
@@ -36,6 +40,7 @@ public class UserMenu {
 
             switch (option) {
                 case 1 -> this.compareValues();
+                case 2 -> this.showHistoryLog();
                 case 0 -> System.exit(0);
                 default -> this.displayMessage("ATENÇÃO: A opção escolhida está incorreta, tente novamente");
             }
@@ -77,8 +82,9 @@ public class UserMenu {
         }
 
         String valorCalculado = service.findValueInPairs(firstValue, secondValue, amount);
-
-        this.displayMessage(String.format("O valor encontrado foi %s, a base foi '%s', o alvo foi '%s', o valor inicial foi %s", valorCalculado, firstValue, secondValue, amount));
+        String result = String.format("O valor encontrado foi %s, a base foi '%s', o alvo foi '%s', o valor inicial foi %s", valorCalculado, firstValue, secondValue, amount);
+        this.saveToHistory(result);
+        this.displayMessage(result);
     }
 
     private void displayMessage(String msg) {
@@ -87,7 +93,6 @@ public class UserMenu {
 
     private boolean existsByIsoCurrencyFromEnum(String currency) {
         Currencies item = Currencies.findByISOValue(currency.toUpperCase());
-
         return item != null;
     }
 
@@ -98,6 +103,25 @@ public class UserMenu {
         } catch (NumberFormatException ex) {
             return false;
         }
+    }
+
+    private void saveToHistory(String message) {
+        DataHistoryService.addToList(message);
+    }
+
+    private void showHistoryLog() {
+        List<String> fullList = DataHistoryService.getHistoryList();
+
+        if (fullList.isEmpty()) {
+            displayMessage("Não existe histórico para ser apresentado!");
+            return;
+        }
+
+        displayMessage("===========HISTÓRICO===========");
+        for (String item : fullList) {
+            displayMessage(item);
+        }
+        displayMessage("=========FIM=HISTÓRICO=========");
     }
 }
 
